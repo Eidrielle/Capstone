@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Business Permit - Step 6</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+   <!-- HEADER -->
+  <header class="header">
+    <div class="logo-container">
+      <img src="Barangaylogo.png" alt="Barangay Logo" class="pup-logo">
+      <a href="#" class="logo">Barangay Connect</a>
+    </div>
+    <!-- HAMBURGER ICON -->
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+    <nav class="navbar" id ="">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#history">History</a>
+      <a href="#services">Services</a>
+      <a href="#features">Features</a>
+      <a href="#emergency">Emergency</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <a href="login.html" class="btn-login">Sign In to Start Your Request</a>
+  </header>
+  <main>
+  <div class="indigency-container">
+    <h1>Business Permit / Clearance</h1>
+    <h3>Step 6 of 6 — Review & Submit</h3>
+
+    <div id="summaryArea">
+      <p>Loading summary...</p>
+    </div>
+
+    <label style="display:block;margin-top:12px;">
+      <input type="checkbox" id="agree" /> I declare that the information provided is true and correct.
+    </label>
+
+    <div class="form-buttons" style="margin-top:12px;">
+      <button type="button" onclick="window.history.back()">Back</button>
+      <button type="button" class="btn-submit" onclick="submitBusinessRequest()">Submit Request</button>
+    </div>
+
+    <div id="result" style="display:none;margin-top:18px;"></div>
+  </div>
+  </main>
+   <footer class="footer" id="contact">
+  <div class="footer-container">
+
+    <!--Barangay Image-->
+    <div class="footer-section logo-section">
+      <img src="Images/pinpoint.jpg" alt="Barangay Parada" class="footer-logo" id="footerImg">
+      <p>Barangay Parada Hall - Santa Maria, Bulacan (Click the picture to view)</p>
+    </div>
+
+    <!-- IMAGE POPUP MODAL -->
+    <div id="imgModal" class="modal">
+      <span class="close">&times;</span>
+      <img class="modal-content" id="imgPreview">
+    </div>
+
+    <!--Barangay Secretary -->
+    <div class="footer-section secretary-section">
+      <h3>Barangay Secretary</h3>
+      <img src="Images/kagawad.jpg" alt="Barangay Secretary" class="secretary-photo">
+      <p><strong>Name:</strong> Maria Dela Cruz</p>
+      <p><strong>Contact:</strong> 0917-123-4567</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-section quick-links">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#history">History</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#emergency">Emergency</a></li>
+      </ul>
+    </div>
+
+    <!--Worker Login -->
+    <div class="footer-section worker-login">
+      <h3>For Barangay Workers</h3>
+      <p>Access the barangay portal below:</p>
+      <a href="WORKERFILESIDE/Worker-login.html" class="login-btn">Login Here</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 Barangay Connect | Designed for Barangay Parada</p>
+  </div>
+</footer>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal()">&times;</span>
+          <p id="modal-content"></p>
+          <button id="place-order" onclick="placeOrder()">Place Order</button>
+          <button id="cancel-order" onclick="cancelOrder()">Cancel Order</button>
+        </div>
+      </div>
+  <script src="business.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', ()=> renderSummary());
+
+    function renderSummary(){
+      const s = gatherAllData();
+      const area = document.getElementById('summaryArea');
+      if(!s) { area.innerHTML = '<p>No data found. Please start again.</p>'; return; }
+
+      area.innerHTML = `
+        <ul class="summary-list">
+          <li><strong>Business Name:</strong> ${escapeHtml(s.step1.businessName || '')}</li>
+          <li><strong>Owner:</strong> ${escapeHtml(s.step1.ownerName || '')}</li>
+          <li><strong>Type:</strong> ${escapeHtml(s.step1.businessType || '')}</li>
+          <li><strong>Address:</strong> ${escapeHtml(s.step1.businessAddress || '')}</li>
+          <li><strong>Contact:</strong> ${escapeHtml(s.step1.contact || '')}</li>
+          <li><strong>Uploaded ID (front/back):</strong> ${escapeHtml(s.step2.idFront || '')} / ${escapeHtml(s.step2.idBack || '')}</li>
+          <li><strong>Registration Doc:</strong> ${escapeHtml(s.step2.regDoc || '')}</li>
+          <li><strong>Compliance:</strong> Residential? ${escapeHtml(s.step3.residential || '')}</li>
+          <li><strong>Sanitary / Fire:</strong> ${escapeHtml(s.step3.sanitary || '')} / ${escapeHtml(s.step3.fire || '')}</li>
+          <li><strong>Payment:</strong> ${escapeHtml(s.step4.paymentMethod || '')} ${s.step4.paymentRef ? '(' + escapeHtml(s.step4.paymentRef) + ')' : ''}</li>
+          <li><strong>Inspection:</strong> ${escapeHtml(s.step5.inspectionNeeded || '')} ${s.step5.inspDate ? 'on ' + escapeHtml(s.step5.inspDate) + ' ' + escapeHtml(s.step5.inspTime) : ''}</li>
+        </ul>
+      `;
+    }
+
+    function submitBusinessRequest(){
+      if(!document.getElementById('agree').checked){
+        alert('Please agree to the declaration before submitting.');
+        return;
+      }
+      // Create tracking number and simulate submission
+      const ref = 'BUS-' + Math.floor(Math.random()*900000 + 100000);
+      // You can POST the gathered data to server here. For now we store a submitted flag & ref.
+      const all = gatherAllData();
+      localStorage.setItem('business_submitted', JSON.stringify({ref, submittedAt: new Date().toISOString(), payload: all}));
+      // clear drafting data optionally:
+      clearDraft();
+      // Show result & redirect to thank you
+      document.querySelector('.form-buttons').style.display = 'none';
+      const result = document.getElementById('result');
+      result.style.display = 'block';
+      result.innerHTML = `<h2>✅ Request Submitted</h2>
+        <p>Your Tracking Number: <strong>${ref}</strong></p>
+        <p><a href="thankyou.html">Go to Confirmation Page</a></p>`;
+    }
+  </script>
+</body>
+</html>

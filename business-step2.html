@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Business Permit - Step 2</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+   <!-- HEADER -->
+  <header class="header">
+    <div class="logo-container">
+      <img src="Barangaylogo.png" alt="Barangay Logo" class="pup-logo">
+      <a href="#" class="logo">Barangay Connect</a>
+    </div>
+    <!-- HAMBURGER ICON -->
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+    <nav class="navbar" id ="">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#history">History</a>
+      <a href="#services">Services</a>
+      <a href="#features">Features</a>
+      <a href="#emergency">Emergency</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <a href="login.html" class="btn-login">Sign In to Start Your Request</a>
+  </header>
+  <main>
+  <div class="indigency-container">
+    <h1>Business Permit / Clearance</h1>
+    <h3>Step 2 of 6 — Upload Requirements</h3>
+
+    <form id="step2-form">
+      <label>Barangay Application Form (optional)</label>
+      <input type="file" id="appForm" accept=".pdf,image/*" />
+
+      <label>Owner Valid ID (front)</label>
+      <input type="file" id="idFront" accept="image/*,.pdf" required />
+
+      <label>Owner Valid ID (back)</label>
+      <input type="file" id="idBack" accept="image/*,.pdf" required />
+
+      <label>Business Registration (DTI/SEC/Permit) (if any)</label>
+      <input type="file" id="regDoc" accept=".pdf,image/*" />
+
+      <label>Sketch / Photo of Business Location (optional)</label>
+      <input type="file" id="sketch" accept="image/*" />
+
+      <label>Additional Notes</label>
+      <textarea id="notes" placeholder="Optional remarks"></textarea>
+
+      <div class="form-buttons">
+        <button type="button" onclick="window.history.back()">Back</button>
+        <button type="submit" class="btn-submit">Next</button>
+      </div>
+    </form>
+    <p style="font-size:13px;color:#666;margin-top:8px;">Note: Uploaded files are not persisted in this demo to server. Filenames will be shown in summary.</p>
+  </div>
+  </main>
+    <footer class="footer" id="contact">
+  <div class="footer-container">
+
+    <!--Barangay Image-->
+    <div class="footer-section logo-section">
+      <img src="Images/pinpoint.jpg" alt="Barangay Parada" class="footer-logo" id="footerImg">
+      <p>Barangay Parada Hall - Santa Maria, Bulacan (Click the picture to view)</p>
+    </div>
+
+    <!-- IMAGE POPUP MODAL -->
+    <div id="imgModal" class="modal">
+      <span class="close">&times;</span>
+      <img class="modal-content" id="imgPreview">
+    </div>
+
+    <!--Barangay Secretary -->
+    <div class="footer-section secretary-section">
+      <h3>Barangay Secretary</h3>
+      <img src="Images/kagawad.jpg" alt="Barangay Secretary" class="secretary-photo">
+      <p><strong>Name:</strong> Maria Dela Cruz</p>
+      <p><strong>Contact:</strong> 0917-123-4567</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-section quick-links">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#history">History</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#emergency">Emergency</a></li>
+      </ul>
+    </div>
+
+    <!--Worker Login -->
+    <div class="footer-section worker-login">
+      <h3>For Barangay Workers</h3>
+      <p>Access the barangay portal below:</p>
+      <a href="WORKERFILESIDE/Worker-login.html" class="login-btn">Login Here</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 Barangay Connect | Designed for Barangay Parada</p>
+  </div>
+</footer>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal()">&times;</span>
+          <p id="modal-content"></p>
+          <button id="place-order" onclick="placeOrder()">Place Order</button>
+          <button id="cancel-order" onclick="cancelOrder()">Cancel Order</button>
+        </div>
+      </div>
+  <script src="business.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', ()=> loadStepData('step2'));
+    function getFilesInfo(){
+      // store filenames only (can't store File objects in localStorage)
+      return {
+        appForm: document.getElementById('appForm').files[0]?.name || '',
+        idFront: document.getElementById('idFront').files[0]?.name || '',
+        idBack: document.getElementById('idBack').files[0]?.name || '',
+        regDoc: document.getElementById('regDoc').files[0]?.name || '',
+        sketch: document.getElementById('sketch').files[0]?.name || '',
+        notes: document.getElementById('notes').value.trim()
+      };
+    }
+
+    document.getElementById('step2-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      saveStepData('step2', getFilesInfo());
+      window.location.href = 'business-step3.html';
+    });
+
+    // show filenames if returning to page
+    function fillFileNames(obj){
+      if(!obj) return;
+      if(obj.notes) document.getElementById('notes').value = obj.notes;
+      // For files we can't prefill input type=file, but we can show small hints
+      const hintArea = document.createElement('div');
+      hintArea.style.fontSize = '13px';
+      hintArea.style.color = '#444';
+      hintArea.style.marginTop = '8px';
+      hintArea.innerHTML = `
+        ${obj.idFront ? '<div>Selected ID front: ' + escapeHtml(obj.idFront) + '</div>' : ''}
+        ${obj.idBack ? '<div>Selected ID back: ' + escapeHtml(obj.idBack) + '</div>' : ''}
+        ${obj.appForm ? '<div>Application form: ' + escapeHtml(obj.appForm) + '</div>' : ''}
+        ${obj.regDoc ? '<div>Registration doc: ' + escapeHtml(obj.regDoc) + '</div>' : ''}
+        ${obj.sketch ? '<div>Sketch/photo: ' + escapeHtml(obj.sketch) + '</div>' : ''}
+      `;
+      document.querySelector('.indigency-container form').appendChild(hintArea);
+    }
+
+    // helper from business.js (will exist)
+    // escapeHtml function is defined in business.js
+    window.addEventListener('load', ()=>{
+      const stored = loadRaw('step2');
+      fillFileNames(stored);
+    });
+  </script>
+</body>
+</html>

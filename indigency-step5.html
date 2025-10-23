@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barangay Connect - Step 5</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    (function() {
+      emailjs.init("TQDxet_TrxbQlUBTH");
+    })();
+  </script>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo-container">
+      <img src="Barangaylogo.png" alt="Barangay Logo" class="pup-logo">
+      <a href="#" class="logo">Barangay Connect</a>
+    </div>
+    <!-- HAMBURGER ICON -->
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+    <nav class="navbar" id ="">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#history">History</a>
+      <a href="#services">Services</a>
+      <a href="#features">Features</a>
+      <a href="#emergency">Emergency</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <a href="login.html" class="btn-login">Sign In to Start Your Request</a>
+  </header>
+<main>
+  <div class="indigency-container">
+    <h1>Review Your Request</h1>
+    <h3>Step 5 of 5: Confirmation</h3>
+    <p>Double-check all information before submitting your application.</p>
+
+    <ul class="summary-list">
+      <li><strong>Full Name:</strong> <span id="review-name">Juan Dela Cruz</span></li>
+      <li><strong>Address:</strong> <span id="review-address">Zone 2, Brgy. Mabini</span></li>
+      <li><strong>Purpose:</strong> <span id="review-purpose">Scholarship Application</span></li>
+      <li><strong>Pickup Date:</strong> <span id="review-date">October 21, 2025</span></li>
+      <li><strong>Payment Method:</strong> <span id="review-payment">GCash</span></li>
+      <li><strong>Email:</strong> <span id="review-email">juan@gmail.com</span></li>
+    </ul>
+
+    <div class="form-buttons">
+      <button type="button" onclick="window.history.back()">Back</button>
+      <button type="button" class="btn-submit" onclick="submitApplication()">Submit Request</button>
+    </div>
+
+    <div id="confirmation" style="display:none; margin-top:20px;">
+      <h2>✅ Request Submitted Successfully!</h2>
+      <p>Your Tracking Number is: <strong id="track"></strong></p>
+      <a href="dashboard.html" class="btn-submit">Return Home</a>
+    </div>
+  </div>
+  </main>
+<footer class="footer" id="contact">
+  <div class="footer-container">
+
+    <!--Barangay Image-->
+    <div class="footer-section logo-section">
+      <img src="Images/pinpoint.jpg" alt="Barangay Parada" class="footer-logo" id="footerImg">
+      <p>Barangay Parada Hall - Santa Maria, Bulacan (Click the picture to view)</p>
+    </div>
+
+    <!-- IMAGE POPUP MODAL -->
+    <div id="imgModal" class="modal">
+      <span class="close">&times;</span>
+      <img class="modal-content" id="imgPreview">
+    </div>
+
+    <!--Barangay Secretary -->
+    <div class="footer-section secretary-section">
+      <h3>Barangay Secretary</h3>
+      <img src="Images/kagawad.jpg" alt="Barangay Secretary" class="secretary-photo">
+      <p><strong>Name:</strong> Maria Dela Cruz</p>
+      <p><strong>Contact:</strong> 0917-123-4567</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-section quick-links">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#history">History</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#emergency">Emergency</a></li>
+      </ul>
+    </div>
+
+    <!--Worker Login -->
+    <div class="footer-section worker-login">
+      <h3>For Barangay Workers</h3>
+      <p>Access the barangay portal below:</p>
+      <a href="WORKERFILESIDE/Worker-login.html" class="login-btn">Login Here</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 Barangay Connect | Designed for Barangay Parada</p>
+  </div>
+</footer>
+  <script>
+    function submitApplication() {
+      const tracking = "IND-" + Math.floor(Math.random() * 90000 + 10000);
+      document.getElementById("track").textContent = tracking;
+
+      const formData = {
+        name: document.getElementById("review-name").textContent,
+        address: document.getElementById("review-address").textContent,
+        purpose: document.getElementById("review-purpose").textContent,
+        pickup_date: document.getElementById("review-date").textContent,
+        payment_method: document.getElementById("review-payment").textContent,
+        email: "galindezeidrielle@gmail.com",
+        tracking_number: tracking
+
+      };
+
+      // Send via EmailJS
+      emailjs.send('service_t7xs7o9', 'template_w15bkyw', formData)
+        .then(() => {
+          document.querySelector(".form-buttons").style.display = "none";
+          document.getElementById("confirmation").style.display = "block";
+          alert("✅ Request submitted! A confirmation email was sent to " + formData.email);
+        })
+        .catch(error => {
+          console.error("Email failed:", error);
+          alert("❌ Something went wrong while sending the email.");
+        });
+    }
+  </script>
+</body>
+</html>

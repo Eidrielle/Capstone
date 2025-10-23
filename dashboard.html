@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barangay Information System - Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+ <!-- HEADER -->
+  <header class="header">
+    <div class="logo-container">
+      <img src="Barangaylogo.png" alt="Barangay Logo" class="pup-logo">
+      <a href="#" class="logo">Barangay Connect</a>
+    </div>
+    <!-- HAMBURGER ICON -->
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+    <nav class="navbar" id ="">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#history">History</a>
+      <a href="#services">Services</a>
+      <a href="#features">Features</a>
+      <a href="#emergency">Emergency</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <a href="login.html" class="btn-login">Sign In to Start Your Request</a>
+  </header>
+   <main>
+
+    <h1>DASHBOARD</h1>
+  <!-- DASHBOARD CONTENT -->
+  <div class="dashboard-container">
+    
+    <!-- LEFT SIDE (Quick Actions) -->
+    <div class="quick-actions">
+      <h2>Quick Actions</h2>
+      <button id="btnClearance" onclick="window.location.href='clearance-step1.html'">Apply For Brgy Clearance</button>
+      <button id="btnIndigency" onclick="window.location.href='indigency-step1.html'">Apply For Certificate of Indigency</button>
+      <button id="btnCedula" onclick="window.location.href='cedula-step1.html'">Apply For Brgy Cedula</button>
+      <button id="btnBusiness" onclick="window.location.href='business-step1.html'">Apply For Business Clearance/Permit</button>
+    </div>
+
+    <!-- RIGHT SIDE (Notifications + My Request) -->
+    <div class="right-column">
+      
+      <div class="notifications">
+        <h2>Notifications</h2>
+        <p>✔ Your Barangay Clearance has been approved!</p>
+        <p>📅 You can pick it up tomorrow between 8AM - 5PM.</p>
+      </div>
+
+      <div class="my-request">
+        <h2>My Request</h2>
+
+        <!-- 🔍 Search and Filter -->
+        <div class="filter-bar">
+          <input type="text" id="searchInput" placeholder="Search document type...">
+          <select id="statusFilter">
+            <option value="all">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Declined">Declined</option>
+          </select>
+        </div>
+
+        <table id="requestTable">
+          <thead>
+            <tr>
+              <th>Document Type</th>
+              <th>Date Requested</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Brgy Clearance</td>
+              <td>09/16/2025</td>
+              <td>Approved</td>
+              <td><button>View</button></td>
+            </tr>
+            <tr>
+              <td>Certificate of Indigency</td>
+              <td>09/12/2025</td>
+              <td>Pending</td>
+              <td><button>Cancel</button></td>
+            </tr>
+            <tr>
+              <td>Business Clearance</td>
+              <td>10/02/2025</td>
+              <td>Declined</td>
+              <td><button>View</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+  </main>
+  <!-- FOOTER -->
+ <footer class="footer" id="contact">
+  <div class="footer-container">
+
+    <!--Barangay Image-->
+    <div class="footer-section logo-section">
+      <img src="Images/pinpoint.jpg" alt="Barangay Parada" class="footer-logo" id="footerImg">
+      <p>Barangay Parada Hall - Santa Maria, Bulacan (Click the picture to view)</p>
+    </div>
+
+    <!-- IMAGE POPUP MODAL -->
+    <div id="imgModal" class="modal">
+      <span class="close">&times;</span>
+      <img class="modal-content" id="imgPreview">
+    </div>
+
+    <!--Barangay Secretary -->
+    <div class="footer-section secretary-section">
+      <h3>Barangay Secretary</h3>
+      <img src="Images/kagawad.jpg" alt="Barangay Secretary" class="secretary-photo">
+      <p><strong>Name:</strong> Maria Dela Cruz</p>
+      <p><strong>Contact:</strong> 0917-123-4567</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-section quick-links">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#history">History</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#emergency">Emergency</a></li>
+      </ul>
+    </div>
+
+    <!--Worker Login -->
+    <div class="footer-section worker-login">
+      <h3>For Barangay Workers</h3>
+      <p>Access the barangay portal below:</p>
+      <a href="WORKERFILESIDE/Worker-login.html" class="login-btn">Login Here</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 Barangay Connect | Designed for Barangay Parada</p>
+  </div>
+</footer>
+
+  <!-- JS -->
+  <script>
+    // --- Search and Filter Logic ---
+    const searchInput = document.getElementById("searchInput");
+    const statusFilter = document.getElementById("statusFilter");
+    const table = document.getElementById("requestTable");
+    const rows = table.getElementsByTagName("tr");
+
+    function filterTable() {
+      const searchText = searchInput.value.toLowerCase();
+      const selectedStatus = statusFilter.value;
+
+      for (let i = 1; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName("td");
+        if (cells.length > 0) {
+          const type = cells[0].textContent.toLowerCase();
+          const status = cells[2].textContent;
+
+          const matchSearch = type.includes(searchText);
+          const matchStatus = selectedStatus === "all" || status === selectedStatus;
+
+          rows[i].style.display = (matchSearch && matchStatus) ? "" : "none";
+        }
+      }
+    }
+
+    searchInput.addEventListener("keyup", filterTable);
+    statusFilter.addEventListener("change", filterTable);
+  </script>
+</body>
+</html>
